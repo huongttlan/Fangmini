@@ -36,16 +36,33 @@ Postgresql into five tables:
    python script that converts these 'inadvertent' delimiters into semicolons
    (';').
 
+# Submission
+Replace the default values in `__init__.py` with your answers. Avoid running
+"on-the-fly" computations or scripts in this file. Ideally it should be a
+static list which you paste in or load from file. The less moving parts there
+are, the easier it is on the grader.
+
 # Questions
 
 ## score_by_zipcode
 Return a list of tuples of the form:
 ```
-    (zipcode, mean grade, standard error, number of inspections)
+(zipcode, mean score, standard error, number of violations)
 ```
-for each of the 184 zipcodes in the city with over 100 inspections. Sort the
-list in ascending order by mean grade. You can read more about standard error
+for each of the 184 zipcodes in the city with over 100 violations. Sort the
+list in ascending order by mean score. You can read more about standard error
 on [wikipedia](http://en.wikipedia.org/wiki/Standard_error).
+
+**Note:** There is an interesting discussion here about what the mean score
+*means* in this dataset. Think about what we're actually calculating - 
+does it represent what we're trying to understand about these zipcodes?
+
+In other words, what is the difference between the question we're trying
+to answer with this analysis intuitively and the question we're actually
+answering?
+
+If we were to do a different calculation, what biases would we run into?
+How should we deal with this kind of situation as data scientists? 
 
 **Checkpoint**
 Total entries in valid zipcodes: 531,126
@@ -66,7 +83,7 @@ Liberty), Financial District, Chinatown, and Coney Island fare?
 ## score_by_borough
 Return a list of tuples of the form:
     ```
-    (borough, mean grade, stderr, number of inspections)
+    (borough, mean score, stderr, number of violations)
     ```
 for each of the city's five boroughs. Sort the list in ascending order by grade.
 
@@ -78,11 +95,15 @@ Total entries in valid boroughs: 531,832
 ## score_by_cuisine
 Return a list of the 75 tuples of the form
     ```
-    (cuisine, mean grade, stderr, number of inspections)
+    (cuisine, mean score, stderr, number of violations)
     ```
 for each of the 75 cuisine types with at least 100 inspections. Sort the list 
 in ascending order by score. Are the least sanitary and most sanitary cuisine
 types surprising?
+
+**Note:** It's interesting to think again about what this analysis is trying
+to say and how it differs from the analysis by zipcode. How should this
+affect the calculation in your opinion?
 
 **Checkpoint**
 Total entries from valid cuisines: 531,529
@@ -104,7 +125,7 @@ type of violation given a specific cuisine type and divide it by the
 unconditional probability of the violation for the entire population. Taking
 this ratio gives the right answer.  Return the 20 highest ratios of the form:
     ```
-        ((cuisine, violation), ratio, count)
+    ((cuisine, violation), ratio, count)
     ```
 
 **Hint**:
@@ -113,11 +134,12 @@ this ratio gives the right answer.  Return the 20 highest ratios of the form:
 2. The definition of a violation changes with time.  For example, 10A can mean
    two different things "Toilet facility not maintained ..." or "Vermin or
    other live animal present ..." when things were prior to 2003. To deal with
-   this, you should limit your analysis to violations with end date after Jan 1,
-   2014.
+   this, you should limit your analysis to violation codes with end date after
+   Jan 1, 2014. (This end date refers to the validity time ranges in
+   Violation.txt).
 3. The ratios don't mean much when the number of violations of a given type and
    for a specific category are not large (why not?).  Be sure to filter these
    out.  We chose 100 as our cutoff.
 
 **Checkpoint**:
-Top 20 ratios mean: 1.95724597861122
+Top 20 ratios mean: 2.37009216349859
